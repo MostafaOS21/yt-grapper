@@ -27,12 +27,16 @@ Input.displayName = "Input";
 import { DownloadCloud } from "lucide-react";
 import { Button } from "./button";
 
-const DownloadInput = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
+interface DownloadInputProps extends InputProps {
+  btnText: string; // Add btnText property here
+}
+
+const DownloadInput = React.forwardRef<HTMLInputElement, DownloadInputProps>(
+  ({ className, type, btnText, ...props }, ref) => {
     return (
       <div
         className={cn(
-          "flex p-2 items-center rounded-md border border-input focus-within:border-primary bg-white  text-sm ring-offset-background focus-within:ring-ring    space-x-3",
+          "flex p-[8px] items-center rounded-md border border-input focus-within:border-primary bg-white  text-sm ring-offset-background focus-within:ring-ring    space-x-3",
           className
         )}
       >
@@ -44,7 +48,7 @@ const DownloadInput = React.forwardRef<HTMLInputElement, InputProps>(
         />
 
         <Button className="flex items-center gap-1">
-          <DownloadCloud /> Start now!
+          <DownloadCloud /> {btnText}
         </Button>
       </div>
     );
