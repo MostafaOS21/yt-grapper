@@ -18,13 +18,22 @@ export async function POST(req: NextApiRequest) {
       prev.width > current.width ? prev : current
     ).url;
 
-    const videoQualities = formats.map((format) => ({
-      quality: format.qualityLabel,
-      url: format.url,
-      mimeType: format.mimeType,
-      container: format.container,
-      codec: format.codecs,
-    }));
+    const videoQualities = formats
+      .map((format) => ({
+        quality: format.qualityLabel,
+        url: format.url,
+        mimeType: format.mimeType,
+        container: format.container,
+        codec: format.codecs,
+      }))
+      .sort((a, b) => {
+        const aQuality = parseInt(a.quality.split("p")[0]);
+        const bQuality = parseInt(b.quality.split("p")[0]);
+
+        return bQuality - aQuality;
+      });
+
+    const audioFormats = ytdl.filterFormats(info.formats, "audio");
 
     const duration = formatVideoDuration(
       parseInt(info.videoDetails.lengthSeconds)
@@ -37,8 +46,11 @@ export async function POST(req: NextApiRequest) {
       title: info.videoDetails.title,
       duration,
       videoQualities,
+      audioFormats,
     };
   });
+
+  console.log(info);
 
   return NextResponse.json(info);
 }

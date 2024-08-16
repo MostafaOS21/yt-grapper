@@ -56,7 +56,7 @@ export default function Home({ searchParams }: SearchParamProps) {
 
       <SVGImages />
 
-      <VideoDetailsDialog isOpen={isOpen} info={info} />
+      <VideoDetailsDialog isOpen={isOpen} setIsOpen={setIsOpen} info={info} />
     </section>
   );
 }
