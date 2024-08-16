@@ -24,31 +24,40 @@ Input.displayName = "Input";
 
 // DownloadInput
 
-import { DownloadCloud } from "lucide-react";
+import { LoaderCircle, Play } from "lucide-react";
 import { Button } from "./button";
 
 interface DownloadInputProps extends InputProps {
-  btnText: string; // Add btnText property here
+  isLoading?: boolean;
 }
 
 const DownloadInput = React.forwardRef<HTMLInputElement, DownloadInputProps>(
-  ({ className, type, btnText, ...props }, ref) => {
+  ({ className, type, isLoading, ...props }, ref) => {
     return (
       <div
         className={cn(
-          "flex p-[8px] items-center rounded-md border border-input focus-within:border-primary bg-white  text-sm ring-offset-background focus-within:ring-ring    space-x-3",
+          "flex p-[8px] items-center rounded-md border-[2px] transition-colors border-input focus-within:border-primary bg-white  text-sm ring-offset-background focus-within:ring-ring space-x-3",
           className
         )}
       >
         <input
+          disabled={isLoading}
           {...props}
           type={type}
           ref={ref}
           className="w-full p-2 placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
         />
 
-        <Button className="flex items-center gap-1">
-          <DownloadCloud /> {btnText}
+        <Button
+          className="flex items-center gap-1"
+          disabled={isLoading}
+          type="submit"
+        >
+          {isLoading ? (
+            <LoaderCircle className="animate-spin" size={20} />
+          ) : (
+            <Play size={20} />
+          )}
         </Button>
       </div>
     );

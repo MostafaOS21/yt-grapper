@@ -14,11 +14,11 @@ export default function Header() {
           src="/assets/logo.png"
           width={512}
           height={512}
-          className="size-[40px]"
+          className="size-[35px]"
           alt="logo"
         />
 
-        <span className="font-bold text-primary">YT Grapper</span>
+        <span className="font-semibold text-primary text-xs">YT Grapper</span>
       </Link>
 
       <ul className="flex items-center space-x-2">
