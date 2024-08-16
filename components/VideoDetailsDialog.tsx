@@ -16,7 +16,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import Image from "next/image";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 export default function VideoDetailsDialog({
   info,
@@ -27,6 +27,8 @@ export default function VideoDetailsDialog({
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
   return (
     <Dialog
       open={isOpen}
@@ -42,8 +44,8 @@ export default function VideoDetailsDialog({
 
         <Image
           src={info?.thumbnail || ""}
-          width={150}
-          height={84.38}
+          width={800}
+          height={450}
           alt="thumbnail"
           className="w-full rounded"
         />
@@ -75,7 +77,21 @@ export default function VideoDetailsDialog({
                 </Select>
               </TabsContent>
               <TabsContent value="audio">
-                Change your password here.
+                <Select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select resolution" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background w-full">
+                    {info?.videoQualities.map((quality) => (
+                      <SelectItem
+                        key={`${quality.quality}:${quality.mimeType}`}
+                        value={quality.url}
+                      >
+                        {quality.quality} - {quality.mimeType.split(";")[0]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </TabsContent>
             </Tabs>
           </CardContent>

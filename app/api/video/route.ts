@@ -4,11 +4,7 @@ import { NextResponse } from "next/server";
 import { formatVideoDuration } from "@/lib/utils";
 
 export async function POST(req: NextApiRequest) {
-  // example: /api/video?url=https://www.youtube.com/watch?v=UbYg6NK03aQ
-  const videoUrl = new URL(
-    req.url as string,
-    "http://localhost:3000"
-  ).searchParams.get("url") as string;
+  const videoUrl = new URL(req.url as string).searchParams.get("url") as string;
 
   const info = await ytdl.getInfo(videoUrl).then((info) => {
     const formats = ytdl.filterFormats(info.formats, "video");
@@ -21,32 +17,45 @@ export async function POST(req: NextApiRequest) {
     const videoQualities = formats
       .map((format) => ({
         quality: format.qualityLabel,
-        url: format.url,
+        // url: format.url,
         mimeType: format.mimeType,
-        container: format.container,
-        codec: format.codecs,
+        // container: format.container,
+        // codec: format.codecs,
       }))
       .sort((a, b) => {
         const aQuality = parseInt(a.quality.split("p")[0]);
         const bQuality = parseInt(b.quality.split("p")[0]);
 
         return bQuality - aQuality;
-      });
+      })
+      .filter((format) => format.mimeType?.includes("mp4"));
 
-    const audioFormats = ytdl.filterFormats(info.formats, "audio");
+    const audioFormat = ytdl
+      .filterFormats(info.formats, "audio")
+      .map((format) => ({
+        quality: format.audioQuality,
+        mimeType: format.mimeType?.split(";")[0],
+        container: format.container,
+      }))
+      .filter(
+        (format, index, self) =>
+          index ===
+          self.findIndex(
+            (t) =>
+              t.quality === format.quality && t.mimeType === format.mimeType
+          )
+      );
 
     const duration = formatVideoDuration(
       parseInt(info.videoDetails.lengthSeconds)
     );
-
-    console.log(duration);
 
     return {
       thumbnail,
       title: info.videoDetails.title,
       duration,
       videoQualities,
-      audioFormats,
+      audioFormat,
     };
   });
 
