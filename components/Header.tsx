@@ -24,7 +24,7 @@ export default function Header() {
       <ul className="flex items-center space-x-2">
         <li>
           <Button asChild variant={"ghost"}>
-            <Link href={"?type=video"}>
+            <Link href={"/video"}>
               <Video className="mr-3" size={21} /> Video
             </Link>
           </Button>

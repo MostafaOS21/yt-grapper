@@ -87,6 +87,7 @@ export default function VideoDetailsDialog({
                         key={`${quality.quality}:${quality.mimeType}`}
                         value={quality.url}
                       >
+                        {`${quality.quality}:${quality.mimeType}`}
                         {quality.quality} - {quality.mimeType.split(";")[0]}
                       </SelectItem>
                     ))}
